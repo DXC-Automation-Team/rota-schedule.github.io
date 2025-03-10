@@ -1,0 +1,23 @@
+#sidebar{
+    width: 250px;
+    height: 100%;
+}
+.rotapage th{
+    text-align: center;
+}
+.rotapage td{ padding: 0%;}
+.rotapage td input{
+    width: 100%;
+    border: none;
+    padding: 3px;
+}
+.rotapage .card-body{
+    overflow-x: scroll;
+}
+.rotapage td, .rotapage thead tr:nth-child(2) th{
+    font-size: 10pt;
+}
+.rotapage tr td:nth-child(1) input, .rotapage tr th:nth-child(1){
+    width: 200px !important;
+    white-space: nowrap;
+}

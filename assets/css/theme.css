@@ -1,0 +1,48 @@
+/* Set the width of vertical scrollbars */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 10px; 
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/* Change the background color of scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Change the background color of scrollbar thumb */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/* Change the background color of scrollbar track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+html,body{
+    overflow-x: hidden;
+    font-family: 'Anaheim';
+}
+.card.rotapage{
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-top: none !important;
+}
+.nav-link{
+    color: #888 !important;
+}
+.nav-link.active{
+    color: var(--bs-nav-link-color) !important;
+}
+.modal-header{
+    border-bottom: none !important;
+}
+.modal-footer{
+    border-top: none !important;
+}

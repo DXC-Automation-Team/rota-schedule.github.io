@@ -1,0 +1,729 @@
+<!doctype html>
+<html>
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/theme.css">
+    <link href='https://fonts.googleapis.com/css?family=Anaheim' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <title> SPP Things </title>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg  bg-dark border-bottom border-body" data-bs-theme="dark">
+        <div class="container-fluid">
+            <div class="row flex-grow-1">
+                <div class="col-4">
+                    <button class="btn btn-outline-light border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#references" aria-controls="references">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+                <div class="col-4 text-center" >
+                    <span class="navbar-brand" id="page-name"></span>
+                </div>
+                <div class="col-4">
+                    <div class="d-flex">
+                        <button class="btn btn-outline-light border-0 ms-auto" type="button" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            <i class="fa-solid fa-file-arrow-up"></i>
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </nav>
+    <!-- Modals -->
+            
+        <!-- General Modal -->
+        <div class="modal fade" id="generalModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modal-title"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modal-message"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Upload Modal -->
+        <div class="modal fade" id="uploadModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Upload ROTA file</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="rotaFile" class="form-label">Select ROTA file</label>
+                                <input class="form-control" type="file" id="rotaFile" accept=".xlsm, .xlsx">
+                                <div class="upload-text form-text">Please upload the ROTA file to set up the database.</div>
+                                <div class="upload-text form-text d-none">Workbook loaded successfully!</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="extract" disabled>Extract</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- end alerts -->    
+    <div class="container-fluid">
+        
+        <div class="container mt-3" id="main">
+            <div class="page" id="rotas-page">
+                <h1>For the year <span id="year"></span></h1> 
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-1" role="tab" aria-controls="rota-1" aria-selected="true">January</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-2" role="tab" aria-controls="rota-2" aria-selected="false">February</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-3" role="tab" aria-controls="rota-3" aria-selected="false">March</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-4" role="tab" aria-controls="rota-4" aria-selected="false">April</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-5" role="tab" aria-controls="rota-5" aria-selected="false">May</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-6" role="tab" aria-controls="rota-6" aria-selected="false">June</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-7" role="tab" aria-controls="rota-7" aria-selected="false">July</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-8" role="tab" aria-controls="rota-8" aria-selected="false">August</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-9" role="tab" aria-controls="rota-9" aria-selected="false">September</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-10" role="tab" aria-controls="rota-10" aria-selected="false">October</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-11" role="tab" aria-controls="rota-11" aria-selected="false">November</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" aria-current="page" data-bs-toggle="tab" data-bs-target="#rota-12" role="tab" aria-controls="rota-12" aria-selected="false">December</button>
+                    </li>                    
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade" id="rota-1" role="tabpanel" aria-labelledby="rota-1" tabindex="0">
+                        <div class="card rotapage">
+                            <div class="card-body">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="rota-2" role="tabpanel" aria-labelledby="rota-2" tabindex="0">
+                        <div class="card rotapage">
+                            <div class="card-body">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="rota-3" role="tabpanel" aria-labelledby="rota-3" tabindex="0">
+                        <div class="card rotapage">
+                            <div class="card-body">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="d-none page" id="team-info-page">
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="sub-sl" class="form-label">SUB-SL</label>
+                                <select class="form-select" id="sub-sl" aria-describedby="sub-sl">
+                                    <option value="C&I: CDM CIBC">C&I: CDM CIBC</option>
+                                    <option value="C&I: CIBC">C&I: CIBC</option>
+                                    <option value="C&I: EAO">C&I: EAO</option>
+                                    <option value="C&I: Leadership">C&I: Leadership</option>
+                                    <option value="C&I: LT & BizOps">C&I: LT & BizOps</option>
+                                    <option value="C&I: Network">C&I: Network</option>
+                                    <option value="C&I: PM & EAO SDEX">C&I: PM & EAO SDEX</option>
+                                    <option value="C&I: PM & PMO">C&I: PM & PMO</option>
+                                    <option value="C&I: VPC">C&I: VPC</option>
+                                    <option value="CIO: DXC IT">CIO: DXC IT</option>
+                                    <option value="Delivery Excellence">Delivery Excellence</option>
+                                    <option value="Global Deliver: Region">Global Deliver: Region</option>
+                                    <option value="Site Operations">Site Operations</option>
+                                  </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="team-name" class="form-label">Team Name</label>
+                                <input type="text" class="form-control" id="team-name" aria-describedby="team-name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="wbs" class="form-label">WBS</label>
+                                <input type="text" class="form-control" id="wbs" aria-describedby="wbs">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none page" id="employee-info-page">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>EID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>123456</td>
+                                    <td>John Doe</td>
+                                    <td>some@email</td>
+                                </tr>
+                                <tr>
+                                    <td>123456</td>
+                                    <td>John Doe</td>
+                                    <td>some@email</td>
+                                </tr>
+                                <tr>
+                                    <td>123456</td>
+                                    <td>John Doe</td>
+                                    <td>some@email</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none page" id="shift-info-page">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th>Start Shift</th>
+                                    <th>Shift Hours</th>
+                                    <th>Actual Hours</th>
+                                    <th>End Shift</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>AP</td>
+                                    <td>Regular Shift</td>
+                                    <td>06:00</td>
+                                    <td>9</td>
+                                    <td>8</td>
+                                    <td>15:00</td>
+                                </tr>
+                                <tr>
+                                    <td>EU</td>
+                                    <td>Regular Shift</td>
+                                    <td>14:00</td>
+                                    <td>9</td>
+                                    <td>8</td>
+                                    <td>23:00</td>
+                                </tr>
+                                <tr>
+                                    <td>NA</td>
+                                    <td>Regular Shift</td>
+                                    <td>22:00</td>
+                                    <td>9</td>
+                                    <td>8</td>
+                                    <td>7:00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none page" id="PUTIL-target-page">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Expected Hours</th>
+                                    <th>Days</th>
+                                    <th>PUTIL target</th>
+                                    <th>Hours</th>
+                                    <th>Target</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>4/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>5/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>6/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>7/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>8/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>9/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>10/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>11/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>12/1/2024</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>1/1/2025</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>2/1/2025</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                                <tr>
+                                    <td>3/1/2025</td>
+                                    <td>176</td>
+                                    <td>22</td>
+                                    <td>85.98%</td>
+                                    <td>2</td>
+                                    <td>19</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none page" id="SPP-cutoffs-page">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Cutoff Start</th>
+                                    <th>Cutoff End</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>12/1/2024</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>1/1/2025</td>
+                                    <td>Friday, 17 January 2025</td>
+                                    <td>Monday, 20 January 2025</td>
+                                </tr>
+                                <tr>
+                                    <td>2/1/2025</td>
+                                    <td>Wednesday, 19 February 2025</td>
+                                    <td>Thursday, 20 February 2025</td>
+                                </tr>
+                                <tr>
+                                    <td>3/1/2025</td>
+                                    <td>Wednesday, 19 March 2025</td>
+                                    <td>Thursday, 20 March 2025</td>
+                                </tr>
+                                <tr>
+                                    <td>4/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>5/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>6/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>7/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>8/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>9/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>10/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>11/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                                <tr>
+                                    <td>12/1/2025</td>
+                                    <td>Friday, 13 December 2024</td>
+                                    <td>Monday, 16 December 2024</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none page" id="submission-logs-page">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Submit Date</th>
+                                    <th>From Date</th>
+                                    <th>To Date</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>some@email</td>
+                                    <td>1/1/2025 09:41 AM</td>
+                                    <td>12/21/2024</td>
+                                    <td>1/20/2025</td>
+                                    <td>Shift Data</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="references" aria-labelledby="referencesLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="referencesLabel">References</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="list-group list-group-flush">
+                <button type="button" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action active" target="rotas-page">ROTAs</button>
+                <button type="button" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action " target="team-info-page">Team Info</button>
+                <button type="button" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action " target="employee-info-page">Employee Info</button>
+                <button type="button" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action " target="shift-info-page">Shift Info</button>
+                <button type="button" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action " target="PUTIL-target-page">PUTIL Target</button>
+                <button type="button" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action " target="SPP-cutoffs-page">SPP Cutoffs</button>
+                <button type="button" data-bs-dismiss="offcanvas" class="list-group-item list-group-item-action " target="submission-logs-page">Submission Logs</button>
+
+            </div>        
+        </div>
+    </div>
+
+
+
+    <script src="assets/jquery/jquery-3.7.1.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var workbook; // Variable to store the workbook
+            init();
+            $(document)
+            .on('click', '#references .list-group-item', function(){
+                $('#references .list-group-item').removeClass('active');
+                $(this).addClass('active');
+                $('#page-name').text($(this).text());
+                let page = '#'+$(this).attr('target');
+                $(page).removeClass('d-none');
+                $('.page').not(page).addClass('d-none');
+            })
+            .on('change', '#rotaFile', function(event){
+                $('#extract').prop('disabled', false);
+                checkFileInput(event);
+            })
+            .on('click', '#extract', function(){
+                getTableData('Reference', 'tbl_Employee');
+                // getNamedRangeData('Sheet1', 'NamedRange1');
+            })
+
+            async function init(){
+                let d = new Date();
+                let dbExists;
+                setYear(d);
+                setActiveRota(d);
+                await checkDatabaseExists("sppdata")
+                    .then(result => {
+                        dbExists = result.exists; // Save the value to the variable
+                        console.log(dbExists, result.message); // Use the variable as needed
+                        if(!dbExists){
+                            showModal("Database Status", result.message);
+                        }
+                    })
+                    .catch(error => console.log(error));
+                // set page text
+                $('#page-name').text($('#references .list-group-item.active').text());
+                generateTable(d.getMonth()+1);
+
+            }
+            function setYear(d){
+                let year = d.getFullYear();
+                $('#year').text(year);
+            }
+            function setActiveRota(d){
+                let month = d.getMonth();
+                let rota = '#rota-'+(month+1);
+                let link = '#rotas-page .nav-link[aria-controls="rota-'+(month+1)+'"]';
+                $('#rotas-page .nav-link').removeClass('active');
+                $('#rotas-page .tab-pane').removeClass('show active');
+                $(link).addClass('active');
+                $(rota).addClass('show active');
+            }
+            function showModal(title, message){
+                $('#modal-title').text(title);
+                $('#modal-message').text(message);
+                $('#generalModal').modal('show');
+
+            }
+            function checkDatabaseExists(dbName) {
+                return new Promise((resolve, reject) => {
+                    let request = indexedDB.open(dbName);
+
+                    request.onupgradeneeded = function(event) {
+                        request.transaction.abort();
+                        resolve({ exists: false, message: "Database not found. Please set up the required data from the ROTA file. If you have already uploaded the file, please use Microsoft Edge." });
+                    };
+
+                    request.onsuccess = function(event) {
+                        let db = event.target.result;
+                        db.close();
+                        resolve({ exists: true, message: "Database exists and was opened successfully." });
+                    };
+
+                    request.onerror = function(event) {
+                        reject({ exists: false, message: `Error opening database: ${event.target.errorCode}` });
+                    };
+                });
+            }
+            function generateTable(month) {
+                // Get the number of days in the month
+                var daysInMonth = new Date(2025, month, 0).getDate();
+
+                // Create table element
+                var table = $('<table>').addClass('table table-striped table-hover table-bordered');
+
+                // Create table header rows
+                var thead = $('<thead>');
+                var headerRow = $('<tr>');
+                var dayOfWeekRow = $('<tr>');
+                headerRow.append($('<th>').attr('rowspan', 2).text('Name'));
+
+                for (var day = 1; day <= daysInMonth; day++) {
+                    var date = new Date(2025, month - 1, day); // Month is zero-indexed
+                    headerRow.append($('<th>').text(('0' + day).slice(-2)).css('white-space', 'nowrap')); // Format day as dd
+                    dayOfWeekRow.append($('<th>').text(date.toLocaleDateString('en-US', { weekday: 'short' })).css('white-space', 'nowrap')); // Format day of the week as ddd
+                }
+
+                headerRow.append($('<th>').attr('rowspan', 2).text('TEH').css('white-space', 'nowrap'));
+                headerRow.append($('<th>').attr('rowspan', 2).text('PUTIL Hours'));
+                headerRow.append($('<th>').attr('rowspan', 2).text('PUTIL').css('white-space', 'nowrap'));
+
+                thead.append(headerRow);
+                thead.append(dayOfWeekRow);
+                table.append(thead);
+
+                // Create table body
+                var tbody = $('<tbody>').addClass("table-group-divider");
+
+                // Add dummy data rows
+                var dummyData = [
+                    { name: "John Doe", TEH: "8", PUTILHours: "5", PUTIL: "10" },
+                    { name: "Jane Smith", TEH: "7", PUTILHours: "4", PUTIL: "9" },
+                    { name: "Alice Johnson", TEH: "6", PUTILHours: "3", PUTIL: "8" }
+                ];
+
+                for (var i = 0; i < dummyData.length; i++) {
+                    var dataRow = $('<tr>');
+                    var data = dummyData[i];
+                    dataRow.append($('<td>').append($('<input>').attr('type', 'text').val(data.name)));
+                    for (var day = 1; day <= daysInMonth; day++) {
+                        dataRow.append($('<td>').append($('<input>').attr('type', 'text').val('X'))); // Dummy data for days
+                    }
+                    dataRow.append($('<td>').append($('<input>').attr('type', 'text').val(data.TEH)));
+                    dataRow.append($('<td>').append($('<input>').attr('type', 'text').val(data.PUTILHours)));
+                    dataRow.append($('<td>').append($('<input>').attr('type', 'text').val(data.PUTIL)));
+                    tbody.append(dataRow);
+                }
+
+                // Append tbody to the table
+                table.append(tbody);
+
+                // Append the table to .tab-pane.fade .card-body
+                $('#rota-'+(month)+' .card-body').append(table);
+            }
+            function checkFileInput(event) {
+                var fileInput = document.getElementById("rotaFile");
+                if (fileInput.files.length > 0) {
+                    readExcelFile(event);
+                } else {
+                    alert("No file selected.");
+                }
+            }
+
+            function readExcelFile(event) {
+                var file = event.target.files[0];
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    var data = new Uint8Array(e.target.result);
+                    workbook = XLSX.read(data, {type: 'array'});
+                    $('.upload-text').toggleClass('d-none');
+                    
+                };
+
+                reader.readAsArrayBuffer(file);
+            }
+
+            function getNamedRangeData(sheetName, rangeName) {
+                if (!workbook) {
+                    alert("Workbook not loaded!");
+                    return;
+                }
+
+                var sheet = workbook.Sheets[sheetName];
+                if (!sheet) {
+                    alert("Sheet not found!");
+                    return;
+                }
+
+                var range = sheet[rangeName];
+                if (!range) {
+                    alert("Named range not found!");
+                    return;
+                }
+
+                var data = XLSX.utils.sheet_to_json(sheet, {range: range, header: 1});
+                console.log('Named Range Data:', data);
+                return data;
+            }
+
+            function getTableData(sheetName, tableName) {
+                if (!workbook) {
+                    alert("Workbook not loaded!");
+                    return;
+                }
+                // Get the specified sheet
+                const worksheet = workbook.Sheets[sheetName];
+                if (!worksheet) {
+                    throw new Error(`Sheet ${sheetName} not found`);
+                }
+
+                // Get the defined table by its name
+                
+                // Get the defined names
+                const definedNames = workbook.Workbook.Names;
+                const table = definedNames.find(name => name.Name === tableName);
+                console.log("names:"+JSON.stringify(definedNames))
+                return;
+                if (!table) {
+                    throw new Error(`Table ${tableName} not found`);
+                }
+                // Extract table data from the defined range
+                const tableData = XLSX.utils.sheet_to_json(worksheet, { range: table.ref, header: 1 });
+                            
+                console.log(tableData)
+                return tableData;
+            }
+
+
+        });
+    </script>
+</body>
+</html>
